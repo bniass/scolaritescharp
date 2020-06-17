@@ -28,9 +28,10 @@
         <TextBox x:Name="fraisinscriptionTbx" HorizontalAlignment="Left" Height="23" Margin="218,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
         <TextBox x:Name="mensualiteTbx" HorizontalAlignment="Left" Height="23" Margin="218,193,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
         <Label Content="MENSUALITE :" HorizontalAlignment="Left" Margin="64,190,0,0" VerticalAlignment="Top"/>
-        <Button Content="ENREGISTRER" HorizontalAlignment="Left" Margin="236,325,0,0" VerticalAlignment="Top" Width="137" Click="Button_Click"/>
-        <DataGrid  HorizontalContentAlignment="Stretch" 
-         ColumnWidth="*" AlternatingRowBackground="Orange" AutoGenerateColumns="False" x:Name="classeDtg" HorizontalAlignment="Left" Height="410" Margin="64,398,0,0" VerticalAlignment="Top" Width="832">
+        <Button Content="ENREGISTRER" HorizontalAlignment="Left" VerticalAlignment="Top" Width="137" Click="Button_Click" Margin="306,278,0,0"/>
+
+        <DataGrid 
+         ColumnWidth="*" AlternatingRowBackground="Orange" AutoGenerateColumns="False" x:Name="classeDtg" HorizontalAlignment="Left" Height="303" Margin="10,305,0,0" VerticalAlignment="Top" Width="924">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="CODE" Binding="{Binding code}"/>
                 <DataGridTextColumn Header="LIBELLE" Binding="{Binding libelle}"/>
@@ -40,12 +41,14 @@
                 <DataGridTemplateColumn Header="PHOTO" Width="SizeToCells" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <Image Source="{Binding photo}" />
+                            <Image Height="40px" Source="{Binding photo}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
+
+
         <Label Content="FILIERE :" HorizontalAlignment="Left" Margin="64,236,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="filiereCbx" HorizontalAlignment="Left" Margin="218,236,0,0" VerticalAlignment="Top" Width="340"/>
 
