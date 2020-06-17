@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="bdstic2infoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="classe">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="code" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="libelle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="fraisinscription" Type="Int32" Nullable="false" />
+    <Property Name="mensualite" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="inscription" Relationship="Self.FK_inscription_ToClasse" FromRole="classe" ToRole="inscription" />
+    <Property Name="filiere_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="filiere" Relationship="bdstic2infoModel.FK_classe_ToFiliere" FromRole="classe" ToRole="filiere" />
+    <Property Name="photo" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Etudiant">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="matricule" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="prenom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="nom" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="datenaissance" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="adresse" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="inscription" Relationship="Self.FK_inscription_ToEtudiant" FromRole="Etudiant" ToRole="inscription" />
+  </EntityType>
+  <EntityType Name="inscription">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="anneeacademique" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="etudiant_id" Type="Int32" Nullable="false" />
+    <Property Name="classe_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="classe" Relationship="Self.FK_inscription_ToClasse" FromRole="inscription" ToRole="classe" />
+    <NavigationProperty Name="Etudiant" Relationship="Self.FK_inscription_ToEtudiant" FromRole="inscription" ToRole="Etudiant" />
+  </EntityType>
+  <EntityType Name="utilisateur">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="login" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="nomComplet" Type="String" MaxLength="60" FixedLength="false" Unicode="false" />
+    <Property Name="profil" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <Association Name="FK_inscription_ToClasse">
+    <End Role="classe" Type="Self.classe" Multiplicity="1" />
+    <End Role="inscription" Type="Self.inscription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="classe">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="inscription">
+        <PropertyRef Name="classe_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_inscription_ToEtudiant">
+    <End Role="Etudiant" Type="Self.Etudiant" Multiplicity="1" />
+    <End Role="inscription" Type="Self.inscription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Etudiant">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="inscription">
+        <PropertyRef Name="etudiant_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BDContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="classe" EntityType="Self.classe" />
+    <EntitySet Name="Etudiant" EntityType="Self.Etudiant" />
+    <EntitySet Name="inscription" EntityType="Self.inscription" />
+    <EntitySet Name="utilisateur" EntityType="Self.utilisateur" />
+    <AssociationSet Name="FK_inscription_ToClasse" Association="Self.FK_inscription_ToClasse">
+      <End Role="classe" EntitySet="classe" />
+      <End Role="inscription" EntitySet="inscription" />
+    </AssociationSet>
+    <AssociationSet Name="FK_inscription_ToEtudiant" Association="Self.FK_inscription_ToEtudiant">
+      <End Role="Etudiant" EntitySet="Etudiant" />
+      <End Role="inscription" EntitySet="inscription" />
+    </AssociationSet>
+    <EntitySet Name="filiere" EntityType="bdstic2infoModel.filiere" />
+    <AssociationSet Name="FK_classe_ToFiliere" Association="bdstic2infoModel.FK_classe_ToFiliere">
+      <End Role="filiere" EntitySet="filiere" />
+      <End Role="classe" EntitySet="classe" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="filiere">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="libelle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="classe" Relationship="bdstic2infoModel.FK_classe_ToFiliere" FromRole="filiere" ToRole="classe" />
+  </EntityType>
+  <Association Name="FK_classe_ToFiliere">
+    <End Type="bdstic2infoModel.filiere" Role="filiere" Multiplicity="1" />
+    <End Type="bdstic2infoModel.classe" Role="classe" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="filiere">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="classe">
+        <PropertyRef Name="filiere_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

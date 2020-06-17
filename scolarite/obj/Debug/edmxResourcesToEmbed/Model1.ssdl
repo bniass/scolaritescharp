@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="bdstic2infoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="classe">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="code" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="libelle" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="fraisinscription" Type="int" Nullable="false" />
+    <Property Name="mensualite" Type="int" Nullable="false" />
+    <Property Name="filiere_id" Type="int" Nullable="false" />
+    <Property Name="photo" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Etudiant">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="matricule" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="prenom" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="nom" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="datenaissance" Type="date" Nullable="false" />
+    <Property Name="adresse" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="email" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="filiere">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="libelle" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="inscription">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="date" Type="date" Nullable="false" />
+    <Property Name="anneeacademique" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="etudiant_id" Type="int" Nullable="false" />
+    <Property Name="classe_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="utilisateur">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="login" Type="varchar" MaxLength="30" />
+    <Property Name="password" Type="varchar" MaxLength="50" />
+    <Property Name="nomComplet" Type="varchar" MaxLength="60" />
+    <Property Name="profil" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <Association Name="FK_classe_ToFiliere">
+    <End Role="filiere" Type="Self.filiere" Multiplicity="1" />
+    <End Role="classe" Type="Self.classe" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="filiere">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="classe">
+        <PropertyRef Name="filiere_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_inscription_ToClasse">
+    <End Role="classe" Type="Self.classe" Multiplicity="1" />
+    <End Role="inscription" Type="Self.inscription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="classe">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="inscription">
+        <PropertyRef Name="classe_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_inscription_ToEtudiant">
+    <End Role="Etudiant" Type="Self.Etudiant" Multiplicity="1" />
+    <End Role="inscription" Type="Self.inscription" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Etudiant">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="inscription">
+        <PropertyRef Name="etudiant_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="bdstic2infoModelStoreContainer">
+    <EntitySet Name="classe" EntityType="Self.classe" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Etudiant" EntityType="Self.Etudiant" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="filiere" EntityType="Self.filiere" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="inscription" EntityType="Self.inscription" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="utilisateur" EntityType="Self.utilisateur" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_classe_ToFiliere" Association="Self.FK_classe_ToFiliere">
+      <End Role="filiere" EntitySet="filiere" />
+      <End Role="classe" EntitySet="classe" />
+    </AssociationSet>
+    <AssociationSet Name="FK_inscription_ToClasse" Association="Self.FK_inscription_ToClasse">
+      <End Role="classe" EntitySet="classe" />
+      <End Role="inscription" EntitySet="inscription" />
+    </AssociationSet>
+    <AssociationSet Name="FK_inscription_ToEtudiant" Association="Self.FK_inscription_ToEtudiant">
+      <End Role="Etudiant" EntitySet="Etudiant" />
+      <End Role="inscription" EntitySet="inscription" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
