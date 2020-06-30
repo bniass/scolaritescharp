@@ -38,5 +38,27 @@ namespace scolarite.service
             }
             return c;
         }
+
+        public classe updateClasse(classe c)
+        {
+            try
+            {
+                classe classe = db.classe.Find(c.Id);
+                classe.libelle = c.libelle;
+                classe.code = c.code;
+                classe.fraisinscription = c.fraisinscription;
+                classe.mensualite = c.mensualite;
+                classe.filiere = c.filiere;
+                classe.photo = c.photo;
+                db.SaveChanges();
+                return classe;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
     }
 }

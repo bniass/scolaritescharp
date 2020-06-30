@@ -34,53 +34,99 @@ namespace scolarite
             List<filiere> filieres = parametre.findAllFiliere();
             filiereCbx.ItemsSource = filieres;
             filiereCbx.DisplayMemberPath = "libelle";
+            saveBtn.IsEnabled = false;
+            updateBtn.IsEnabled = false;
+            deleteBtn.IsEnabled = false;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private bool verif()
         {
-            if(codeTbx.Text.Trim().Equals("") || libelleTbx.Text.Trim().Equals("") || 
+            if (codeTbx.Text.Trim().Equals("") || libelleTbx.Text.Trim().Equals("") ||
                 fraisinscriptionTbx.Text.Trim().Equals("") || mensualiteTbx.Text.Trim().Equals("") ||
                 filiereCbx.SelectedIndex == -1)
             {
                 MessageBox.Show("Tous les champs sont obligatoires !");
-                return;
+                return false;
             }
 
-            if(data == null)
+            if (data == null)
             {
                 MessageBox.Show("La photo est obligatoire !");
-                return;
+                return false; ;
             }
 
+            return true;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            
             classe classe = new classe();
-            classe.code = codeTbx.Text.Trim();
-            classe.libelle = libelleTbx.Text.Trim();
+            
+            try
+            {
+                saveOrUpdate(classe);
+                data = null;
+                
+                classeDtg.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            Clear();
+            classeDtg.ItemsSource = parametre.findAllClasse();
+        }
 
+        private void saveOrUpdate(classe classe)
+        {
             try
             {
-                classe.fraisinscription = int.Parse(fraisinscriptionTbx.Text.Trim());
-            }
-            catch (Exception )
-            {
-                MessageBox.Show("Frais d'inscription non numérique !");
-                return;
-            }
-            try
-            {
-                classe.mensualite = int.Parse(mensualiteTbx.Text.Trim());
+                if (!verif())
+                {
+                    return;
+                }
+                classe.code = codeTbx.Text.Trim();
+                classe.libelle = libelleTbx.Text.Trim();
+
+                try
+                {
+                    classe.fraisinscription = int.Parse(fraisinscriptionTbx.Text.Trim());
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Frais d'inscription non numérique !");
+                    return;
+                }
+                try
+                {
+                    classe.mensualite = int.Parse(mensualiteTbx.Text.Trim());
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Mensualite non numérique !");
+                    return;
+                }
+
+                classe.filiere = (filiere)filiereCbx.SelectedItem;
+                classe.photo = data;
+                if (classe.Id == 0)
+                {
+                    classe = parametre.saveClasse(classe);
+                    MessageBox.Show("Classe ajoutée !");
+                }
+                else
+                {
+                    classe = parametre.updateClasse(classe);
+                    MessageBox.Show("Classe modifiée !");
+                }
             }
             catch (Exception)
             {
-                MessageBox.Show("Mensualite non numérique !");
-                return;
-            }
 
-            classe.filiere = (filiere)filiereCbx.SelectedItem;
-            classe.photo = data;
-            classe = parametre.saveClasse(classe);
-            data = null;
-            MessageBox.Show("Classe ajoutée !");
-            classeDtg.ItemsSource = parametre.findAllClasse();
+                throw;
+            }
+            
         }
 
         byte[] data = null;
@@ -99,6 +145,75 @@ namespace scolarite
                 data = new byte[fs.Length];
                 fs.Read(data, 0, System.Convert.ToInt32(fs.Length));
             }
+        }
+        classe selectedClasse = null;
+        private void ClasseDtg_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(classeDtg.SelectedIndex < classeDtg.Items.Count -1)
+            {
+                activate(false);
+                selectedClasse = (classe)classeDtg.SelectedItem;
+                if(selectedClasse != null)
+                {
+                    codeTbx.Text = selectedClasse.code;
+                    libelleTbx.Text = selectedClasse.libelle;
+                    fraisinscriptionTbx.Text = selectedClasse.fraisinscription+"";
+                    mensualiteTbx.Text = selectedClasse.mensualite+"";
+                    filiereCbx.SelectedItem = selectedClasse.filiere;
+                    if(selectedClasse.photo != null)
+                    {
+                        img.Source = Utilitaire.BitmapImageFromBytes(selectedClasse.photo);
+                    }
+                    else
+                    {
+                        img.Source = null;
+                    }
+                }
+            }
+            
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            
+            classeDtg.SelectedIndex = -1;
+            Clear();
+            activate(true);
+        }
+
+        private void activate(bool active)
+        {
+            saveBtn.IsEnabled = active;
+            updateBtn.IsEnabled = !active;
+            deleteBtn.IsEnabled = !active;
+        }
+
+        private void Clear()
+        {
+            codeTbx.Text = "";
+            libelleTbx.Text = "";
+            fraisinscriptionTbx.Text = "";
+            mensualiteTbx.Text = "";
+            filiereCbx.SelectedIndex = -1;
+            img.Source = null;
+        }
+
+        private void UpdateBtn_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                saveOrUpdate(selectedClasse);
+                data = null;
+
+                classeDtg.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            Clear();
+            classeDtg.ItemsSource = parametre.findAllClasse();
+
         }
     }
 }

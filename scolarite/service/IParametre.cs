@@ -9,6 +9,7 @@ namespace scolarite.service
     public interface IParametre
     {
         classe saveClasse(classe c);
+        classe updateClasse(classe c);
         List<classe> findAllClasse();
         List<filiere> findAllFiliere();
     }

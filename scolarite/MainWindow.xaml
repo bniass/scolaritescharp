@@ -28,10 +28,10 @@
         <TextBox x:Name="fraisinscriptionTbx" HorizontalAlignment="Left" Height="23" Margin="218,151,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
         <TextBox x:Name="mensualiteTbx" HorizontalAlignment="Left" Height="23" Margin="218,193,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="340"/>
         <Label Content="MENSUALITE :" HorizontalAlignment="Left" Margin="64,190,0,0" VerticalAlignment="Top"/>
-        <Button Content="ENREGISTRER" HorizontalAlignment="Left" VerticalAlignment="Top" Width="137" Click="Button_Click" Margin="306,278,0,0"/>
+        <Button x:Name="saveBtn" Content="ENREGISTRER" HorizontalAlignment="Left" VerticalAlignment="Top" Width="137" Click="Button_Click" Margin="218,278,0,0"/>
 
         <DataGrid 
-         ColumnWidth="*" AlternatingRowBackground="Orange" AutoGenerateColumns="False" x:Name="classeDtg" HorizontalAlignment="Left" Height="303" Margin="10,305,0,0" VerticalAlignment="Top" Width="924">
+         ColumnWidth="*" AlternatingRowBackground="Orange" AutoGenerateColumns="False" x:Name="classeDtg" HorizontalAlignment="Left" Height="303" Margin="10,305,0,0" VerticalAlignment="Top" Width="924" SelectionChanged="ClasseDtg_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="CODE" Binding="{Binding code}"/>
                 <DataGridTextColumn Header="LIBELLE" Binding="{Binding libelle}"/>
@@ -55,6 +55,9 @@
 
         <Button Content="Charger la photo" HorizontalAlignment="Left" Margin="574,70,0,0" VerticalAlignment="Top" Width="174" Click="Button_Click_1"/>
         <Image x:Name="img" HorizontalAlignment="Left" Height="161" Margin="574,97,0,0" VerticalAlignment="Top" Width="174"/>
+        <Button Content="NOUVEAU" HorizontalAlignment="Left" Margin="64,278,0,0" VerticalAlignment="Top" Width="130" Click="Button_Click_2"/>
+        <Button x:Name="updateBtn" Content="MODIFIER" HorizontalAlignment="Left" Margin="387,278,0,0" VerticalAlignment="Top" Width="155" Click="UpdateBtn_Click"/>
+        <Button x:Name="deleteBtn" Content="SUPPRIMER" HorizontalAlignment="Left" Margin="574,278,0,0" VerticalAlignment="Top" Width="165"/>
 
 
     </Grid>
